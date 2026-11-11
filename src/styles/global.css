@@ -24,8 +24,7 @@ figure, h1, h2, h3, p { margin: 0; }
 .brand-dot { color: var(--accent); }
 .site-header { min-height: 112px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); gap: 28px; }
 .wordmark { display: flex; align-items: baseline; gap: 14px; white-space: nowrap; }
-.wordmark-cn { font-family: var(--serif); font-size: 30px; font-weight: 600; letter-spacing: 2px; line-height: 1.2; }
-.wordmark-cn .brand-dot { margin-left: 2px; }
+.wordmark-cn { font-family: var(--serif); font-size: 30px; font-weight: 600; letter-spacing: 0; line-height: 1.2; }
 .wordmark-en { color: var(--muted); font-size: 10px; letter-spacing: 2.5px; }
 .site-header nav { display: flex; gap: 30px; align-items: center; }
 .site-header nav a { position: relative; padding-block: 15px; color: var(--muted); font-size: 14px; }
@@ -75,7 +74,7 @@ figure, h1, h2, h3, p { margin: 0; }
 .photo-number { font-family: var(--sans); font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: 1px; white-space: nowrap; }
 .notes-section { padding-bottom: 96px; }
 .site-footer { padding-block: 34px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 24px; }
-.footer-name { font-family: var(--serif); font-size: 22px; letter-spacing: 2px; }
+.footer-name { font-family: var(--serif); font-size: 22px; letter-spacing: 0; }
 .site-footer p { color: var(--muted); font-size: 11px; margin-top: 7px; }
 .footer-right { text-align: right; padding-top: 4px; }
 .footer-links { display: flex; gap: 22px; font-size: 11px; }
@@ -169,6 +168,7 @@ figure, h1, h2, h3, p { margin: 0; }
 .skip-link:focus { transform: translateY(0); }
 @media (max-width: 800px) {
   .shell { width: calc(100% - 48px); }
+  .site-header { flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; padding-block: 20px; }
   .site-header nav { gap: 22px; }.wordmark-en { display: none; }
   .intro-copy { gap: 30px; grid-template-columns: 1.2fr 1fr; }.intro-copy h1 { font-size: 36px; }
   .section-subtitle, .section-dot { display: none; }
@@ -181,7 +181,7 @@ figure, h1, h2, h3, p { margin: 0; }
 }
 @media (max-width: 540px) {
   .shell { width: calc(100% - 40px); }
-  .site-header { min-height: 94px; gap: 16px; }.wordmark-cn { font-size: 24px; letter-spacing: 0; }
+  .site-header { min-height: 94px; }.wordmark-cn { font-size: 24px; }
   .site-header nav { gap: 15px; }.site-header nav a { font-size: 12px; min-height: 44px; }
   .home-intro { padding-top: 30px; }.intro-sign { display: none; }
   .intro-copy { display: block; padding-block: 18px 26px; }.intro-copy h1 { font-size: 34px; letter-spacing: 0; }
@@ -190,7 +190,7 @@ figure, h1, h2, h3, p { margin: 0; }
   .home-section { padding-top: 51px; }.section-heading { gap: 12px; margin-bottom: 20px; }.section-heading h2 { font-size: 23px; }.eyebrow { font-size: 9px; letter-spacing: 2px; }
   .post-row { grid-template-columns: 23px minmax(0,1fr) 24px; gap: 10px; padding-block: 23px; }.post-summary h3 { font-size: 19px; }.post-summary > p { font-size: 12px; }.post-arrow { min-width: 24px; }.post-meta { font-size: 10px; gap: 9px; }
   .photo-strip { grid-template-columns: 1fr; gap: 28px; }.photo-preview:nth-child(2) { padding-top: 0; }.photo-preview-image img { aspect-ratio: 3 / 2; }.photo-caption { padding-top: 9px; }
-  .notes-section { padding-bottom: 60px; }.site-footer { padding-block: 27px; }.footer-links { gap: 15px; }
+  .notes-section { padding-bottom: 60px; }.site-footer { padding-block: 27px; flex-direction: column; gap: 16px; }.footer-right { text-align: left; }.footer-links { gap: 15px; }
   .page-heading { padding-block: 42px 30px; }.page-heading h1 { font-size: 35px; margin-top: 12px; }.page-heading > p:last-child { font-size: 13px; }
   .listing-page { padding-bottom: 65px; }.listing-page .post-row { padding-block: 25px; }
   .filter-bar button { min-height: 44px; padding-inline: 12px; }

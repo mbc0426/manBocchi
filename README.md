@@ -1,4 +1,4 @@
-# 片刻 · 个人博客
+# manBocchi.github.io · 个人博客
 
 用于生活随笔、摄影作品与学习笔记的简约个人网站。技术栈为 Astro、TypeScript、原生 CSS 和 Markdown，生成静态页面并通过 GitHub Pages 发布。
 
