@@ -6,7 +6,7 @@ const isActive = (path: string) => path === '/' ? current === withBase('/').repl
 ---
 <header class="site-header shell">
   <a class="wordmark" href={withBase('/')} aria-label={`${siteConfig.title}，回到首页`}>
-    <span class="wordmark-cn">{siteConfig.title}</span>
+    <span class="wordmark-cn">{siteConfig.title}<span class="brand-dot">.</span></span>
     <span class="wordmark-en">{siteConfig.englishTitle}</span>
   </a>
   <nav aria-label="主导航">

@@ -3,6 +3,6 @@ import { siteConfig } from '../config';
 import { withBase } from '../lib/content';
 ---
 <footer class="site-footer shell">
-  <div><a class="footer-name" href={withBase('/')}>{siteConfig.title}</a><p>慢一点，也没关系。</p></div>
+  <div><a class="footer-name" href={withBase('/')}>{siteConfig.title}<span class="brand-dot">.</span></a><p>慢一点，也没关系。</p></div>
   <div class="footer-right"><div class="footer-links"><a href={withBase('/rss.xml')}>RSS 订阅</a><a href={siteConfig.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a></div><p>© {new Date().getFullYear()} {siteConfig.author}</p></div>
 </footer>

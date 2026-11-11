@@ -1,6 +1,6 @@
 /** Personalize the site here first. No account or database is required. */
 export const siteConfig = {
-  title: 'manBocchi.github.io',
+  title: '片刻',
   englishTitle: 'MOMENTS',
   author: 'manBocchi',
   description: '一些生活随笔，几帧日常光影，和慢慢积累的学习笔记。',
