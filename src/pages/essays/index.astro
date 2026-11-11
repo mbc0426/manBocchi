@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/content';
+const posts = await getPosts('essay');
+---
+<Base title="生活随笔" description="一些散步、阅读与日常的记录。">
+  <div class="listing-page shell">
+    <header class="page-heading"><p class="eyebrow">WORDS & DAYS</p><h1>生活随笔<span class="brand-dot">。</span></h1><p>不必是特别的一天，也值得留下一点文字。</p></header>
+    {posts.length ? <PostList posts={posts} /> : <p class="empty-state">第一篇随笔，还在路上。</p>}
+  </div>
+</Base>

@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import Icon from '../components/Icon.astro';
+import { siteConfig } from '../config';
+import { photos } from '../data/photos';
+import { getPosts, withBase } from '../lib/content';
+const essays = (await getPosts('essay')).slice(0, 3);
+const notes = (await getPosts('note')).slice(0, 3);
+const cover = photos[0];
+const selected = photos.length >= 5 ? [photos[1], photos[3], photos[4]] : photos.slice(0, 3);
+---
+<Base>
+  <section class="home-intro shell" aria-labelledby="intro-title">
+    <div class="intro-topline"><p class="eyebrow">A PERSONAL JOURNAL</p><span class="intro-sign">生活 · 光影 · 学习</span></div>
+    <div class="intro-copy"><h1 id="intro-title">把日子写下来，<br />把光留在这里<span class="brand-dot">。</span></h1><div><p>{siteConfig.description}</p><a class="text-link" href={withBase('/about/')}>关于这个小小的角落 <Icon name="arrow" size={16} /></a></div></div>
+    {cover && <figure class="hero-photo"><a href={withBase('/photography/')} aria-label="浏览摄影作品"><img src={withBase(cover.src)} srcset={cover.thumbnail ? `${withBase(cover.thumbnail)} 800w, ${withBase(cover.src)} ${cover.width}w` : undefined} sizes="(max-width: 540px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 48px), (max-width: 1136px) calc(100vw - 80px), 1056px" alt={cover.alt} width={cover.width} height={cover.height} fetchpriority="high" /></a><figcaption><span>光落下的地方</span><span>{cover.demo ? '摄影示例 · ' : ''}{cover.credit}</span></figcaption></figure>}
+  </section>
+
+  <section class="home-section shell" aria-labelledby="essays-title">
+    <div class="section-heading"><div><p class="eyebrow">WORDS & DAYS</p><h2 id="essays-title">最近随笔<span class="section-dot"> / </span><span class="section-subtitle">日子的切片</span></h2></div><a class="text-link" href={withBase('/essays/')}>全部随笔 <Icon name="arrow" size={16} /></a></div>
+    <PostList posts={essays} />
+  </section>
+
+  <section class="home-section photo-section shell" aria-labelledby="photos-title">
+    <div class="section-heading"><div><p class="eyebrow">THROUGH THE LENS</p><h2 id="photos-title">一些光影<span class="section-dot"> / </span><span class="section-subtitle">停下来，看一会儿</span></h2></div><a class="text-link" href={withBase('/photography/')}>全部照片 <Icon name="arrow" size={16} /></a></div>
+    <div class="photo-strip">{selected.map((photo, index) => <a class="photo-preview" href={withBase(`/photography/#${photo.id}`)}><div class="photo-preview-image"><img src={withBase(photo.thumbnail || photo.src)} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" decoding="async" /></div><div class="photo-caption"><span>{photo.title}</span><span class="photo-number">0{index + 1}{photo.demo ? ' / 示例' : ''}</span></div></a>)}</div>
+  </section>
+
+  <section class="home-section notes-section shell" aria-labelledby="notes-title">
+    <div class="section-heading"><div><p class="eyebrow">KEEP LEARNING</p><h2 id="notes-title">学习笔记<span class="section-dot"> / </span><span class="section-subtitle">给未来的自己</span></h2></div><a class="text-link" href={withBase('/notes/')}>全部笔记 <Icon name="arrow" size={16} /></a></div>
+    <PostList posts={notes} />
+  </section>
+</Base>

@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { photos } from '../../data/photos';
+import { withBase } from '../../lib/content';
+---
+<Base title="摄影" description="用照片留住一些日常的光影。">
+  <div class="photography-page shell">
+    <header class="page-heading"><p class="eyebrow">THROUGH THE LENS</p><h1>一些光影<span class="brand-dot">。</span></h1><p>没有宏大的主题，只是想记住看见的这一刻。</p></header>
+    {photos.some(photo => photo.demo) && <p class="photo-source-note">当前包含摄影版式示例，示例图片来自 Unsplash。</p>}
+    {!photos.length && <p class="empty-state">新的照片，正在路上。</p>}
+    <div class="photo-gallery">
+      {photos.map((photo, index) => <figure class="gallery-item" id={photo.id}>
+        <a class="gallery-photo" href={withBase(photo.src)} data-photo-index={index} data-title={photo.title} data-caption={photo.caption} data-alt={photo.alt} data-credit={photo.demo ? `示例图片 · ${photo.credit}` : photo.credit} aria-label={`放大查看：${photo.title}`}>
+          <img src={withBase(photo.src)} srcset={photo.thumbnail ? `${withBase(photo.thumbnail)} 800w, ${withBase(photo.src)} ${photo.width}w` : undefined} sizes="(max-width: 540px) calc(100vw - 40px), (max-width: 1136px) 45vw, 509px" alt={photo.alt} width={photo.width} height={photo.height} loading={index < 2 ? 'eager' : 'lazy'} decoding="async" />
+          <span class="photo-expand"><Icon name="expand" size={18} /></span>
+        </a>
+        <figcaption><div><span class="gallery-category">{photo.category}</span><h2>{photo.title}</h2></div><span class="photo-number">{String(index + 1).padStart(2, '0')}</span></figcaption>
+        <p class="gallery-caption">{photo.caption}</p>
+      </figure>)}
+    </div>
+    {photos.length > 0 && <dialog class="lightbox" aria-labelledby="lightbox-title" aria-describedby="lightbox-caption">
+      <button class="lightbox-close" type="button" aria-label="关闭大图"><Icon name="close" size={24} /></button>
+      <div class="lightbox-stage"><button class="lightbox-prev" type="button" aria-label="上一张照片"><Icon name="chevron-left" size={28} /></button><img class="lightbox-image" src={withBase(photos[0].src)} alt={photos[0].alt} /><button class="lightbox-next" type="button" aria-label="下一张照片"><Icon name="chevron-right" size={28} /></button></div>
+      <div class="lightbox-info"><div><h2 id="lightbox-title">{photos[0].title}</h2><p id="lightbox-caption">{photos[0].caption}</p><p class="lightbox-credit"></p></div><p class="lightbox-count" aria-live="polite"></p></div>
+    </dialog>}
+  </div>
+</Base>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-photo-index]')];
+  if (dialog && links.length) {
+    const image = dialog.querySelector<HTMLImageElement>('.lightbox-image')!;
+    const title = dialog.querySelector<HTMLElement>('#lightbox-title')!;
+    const caption = dialog.querySelector<HTMLElement>('#lightbox-caption')!;
+    const credit = dialog.querySelector<HTMLElement>('.lightbox-credit')!;
+    const counter = dialog.querySelector<HTMLElement>('.lightbox-count')!;
+    const close = dialog.querySelector<HTMLButtonElement>('.lightbox-close')!;
+    let current = 0;
+    let trigger: HTMLAnchorElement | null = null;
+    const show = (index: number) => {
+      current = (index + links.length) % links.length;
+      const link = links[current];
+      image.src = link.href; image.alt = link.dataset.alt || '';
+      title.textContent = link.dataset.title || '';
+      caption.textContent = link.dataset.caption || '';
+      credit.textContent = link.dataset.credit || '';
+      counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(links.length).padStart(2, '0')}`;
+    };
+    links.forEach((link, index) => link.addEventListener('click', event => {
+      event.preventDefault(); trigger = link; show(index); dialog.showModal(); document.body.classList.add('modal-open'); close.focus();
+    }));
+    close.addEventListener('click', () => dialog.close());
+    dialog.querySelector('.lightbox-prev')!.addEventListener('click', () => show(current - 1));
+    dialog.querySelector('.lightbox-next')!.addEventListener('click', () => show(current + 1));
+    dialog.addEventListener('keydown', event => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); show(current + (event.key === 'ArrowLeft' ? -1 : 1)); }
+    });
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => { document.body.classList.remove('modal-open'); trigger?.focus(); });
+  }
+</script>

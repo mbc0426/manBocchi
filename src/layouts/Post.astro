@@ -1,0 +1,53 @@
+---
+import Base from './Base.astro';
+import Icon from '../components/Icon.astro';
+import { formatDate, postUrl, readingMinutes, withBase, type Post } from '../lib/content';
+interface Heading { depth: number; slug: string; text: string; }
+interface Props { post: Post; headings: Heading[]; previous?: Post; next?: Post; }
+const { post, headings, previous, next } = Astro.props;
+const isNote = post.data.kind === 'note';
+const section = isNote ? '学习笔记' : '生活随笔';
+const toc = headings.filter(heading => heading.depth > 1 && heading.depth < 4);
+---
+<Base title={post.data.title} description={post.data.description}>
+  <div class="post-shell shell">
+    <a class="back-link" href={withBase(isNote ? '/notes/' : '/essays/')}><Icon name="back" size={16} />返回{section}</a>
+    <header class="article-header">
+      <p class="eyebrow">{isNote ? 'LEARNING NOTES' : 'LIFE JOURNAL'}</p>
+      <h1>{post.data.title}</h1>
+      <div class="post-meta"><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time><span>约 {readingMinutes(post.body)} 分钟</span>{post.data.demo && <span class="demo-label">示例文章</span>}</div>
+      <p class="article-description">{post.data.description}</p>
+      <div class="tag-list">{post.data.tags.map(tag => <span>{tag}</span>)}</div>
+    </header>
+    <div class:list={['article-grid', { 'with-toc': isNote && toc.length > 0 }]}>
+      {isNote && toc.length > 0 && <aside class="article-toc" aria-label="文章目录"><details open><summary>本页目录</summary><ol>{toc.map(heading => <li class:list={{ nested: heading.depth === 3 }}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></details></aside>}
+      <article class="prose"><slot /></article>
+    </div>
+    <div class="copy-status sr-only" role="status" aria-live="polite"></div>
+    <nav class="article-pagination" aria-label="文章前后导航">
+      <div>{previous && <a href={postUrl(previous)}><span>较新一篇</span><strong>{previous.data.title}</strong></a>}</div>
+      <div>{next && <a href={postUrl(next)}><span>较早一篇</span><strong>{next.data.title}</strong></a>}</div>
+    </nav>
+  </div>
+</Base>
+<script>
+  const status = document.querySelector<HTMLElement>('.copy-status');
+  document.querySelectorAll<HTMLPreElement>('.prose pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const button = document.createElement('button');
+    button.type = 'button'; button.className = 'copy-code'; button.textContent = '复制'; button.setAttribute('aria-label', '复制代码');
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(code.textContent || '');
+        button.textContent = '已复制';
+        if (status) status.textContent = '代码已复制到剪贴板';
+        window.setTimeout(() => { button.textContent = '复制'; }, 1800);
+      } catch {
+        if (status) status.textContent = '复制未成功，请选中代码后手动复制';
+        button.textContent = '请手动复制';
+      }
+    });
+    pre.append(button);
+  });
+</script>

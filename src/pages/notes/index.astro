@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/content';
+const posts = await getPosts('note');
+const tags = [...new Set(posts.flatMap(post => post.data.tags))];
+---
+<Base title="学习笔记" description="把学过的事情重新讲清楚，留给未来的自己。">
+  <div class="listing-page shell" data-notes-page>
+    <header class="page-heading"><p class="eyebrow">KEEP LEARNING</p><h1>学习笔记<span class="brand-dot">。</span></h1><p>把一件事情慢慢弄明白，再用自己的话写下来。</p></header>
+    {tags.length > 0 && <div class="filter-bar" aria-label="按主题筛选笔记" hidden><button type="button" data-filter="" aria-pressed="true">全部</button>{tags.map(tag => <button type="button" data-filter={tag} aria-pressed="false">{tag}</button>)}</div>}
+    {posts.length ? <PostList posts={posts} filterable /> : <p class="empty-state">新的笔记，正在整理中。</p>}
+    <p class="sr-only" role="status" aria-live="polite" data-filter-status></p>
+  </div>
+</Base>
+<script>
+  const page = document.querySelector<HTMLElement>('[data-notes-page]');
+  if (page) {
+    const bar = page.querySelector<HTMLElement>('.filter-bar');
+    if (bar) bar.hidden = false;
+    const buttons = page.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const rows = page.querySelectorAll<HTMLElement>('[data-post]');
+    const status = page.querySelector<HTMLElement>('[data-filter-status]');
+    buttons.forEach(button => button.addEventListener('click', () => {
+      const tag = button.dataset.filter || '';
+      buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      let visible = 0;
+      rows.forEach(row => {
+        const tags: string[] = JSON.parse(row.dataset.tags || '[]');
+        row.hidden = !!tag && !tags.includes(tag);
+        if (!row.hidden) visible++;
+      });
+      if (status) status.textContent = `${tag || '全部主题'}，共 ${visible} 篇笔记`;
+    }));
+  }
+</script>

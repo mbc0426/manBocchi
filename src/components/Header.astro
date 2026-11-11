@@ -1,0 +1,15 @@
+---
+import { siteConfig, navigation } from '../config';
+import { withBase } from '../lib/content';
+const current = Astro.url.pathname.replace(/\/$/, '');
+const isActive = (path: string) => path === '/' ? current === withBase('/').replace(/\/$/, '') : current.startsWith(withBase(path).replace(/\/$/, ''));
+---
+<header class="site-header shell">
+  <a class="wordmark" href={withBase('/')} aria-label={`${siteConfig.title}，回到首页`}>
+    <span class="wordmark-cn">{siteConfig.title}<span class="brand-dot">.</span></span>
+    <span class="wordmark-en">{siteConfig.englishTitle}</span>
+  </a>
+  <nav aria-label="主导航">
+    {navigation.map(item => <a href={withBase(item.path)} aria-current={isActive(item.path) ? 'page' : undefined}>{item.title}</a>)}
+  </nav>
+</header>

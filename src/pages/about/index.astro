@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { siteConfig } from '../../config';
+import { withBase } from '../../lib/content';
+---
+<Base title="关于" description={`关于${siteConfig.title}，以及这里记录的日常。`}>
+  <div class="about-page shell">
+    <header class="page-heading"><p class="eyebrow">A LITTLE ABOUT THIS PLACE</p><h1>关于这里<span class="brand-dot">。</span></h1><p>一个存放文字、光影和好奇心的小小角落。</p></header>
+    <div class="about-content">
+      <div class="about-monogram" aria-hidden="true">{siteConfig.title.slice(0,1)}<br />{siteConfig.title.slice(1,2)}<span>.</span></div>
+      <div class="prose about-prose">
+        <p class="about-greeting">你好，我是 {siteConfig.author}。</p>
+        <p>我把这里当作一本可以慢慢写的手记。记录生活里那些不起眼、却想留住的片刻，也整理学习途中逐渐清晰的想法。</p>
+        <h2>这里会放些什么</h2>
+        <p><a href={withBase('/essays/')}>生活随笔</a>，写一些日常、阅读与散步中的感受。<br /><a href={withBase('/photography/')}>摄影作品</a>，留住一束光、一条路，或一次短暂的停留。<br /><a href={withBase('/notes/')}>学习笔记</a>，把学过的东西重新讲清楚，留给未来的自己。</p>
+        <h2>保持一点缓慢</h2>
+        <p>不追赶更新频率，也不急着给每件事下结论。愿这里的文字和照片，能让你在浏览时稍稍停留。</p>
+        <div class="about-contact"><a href={siteConfig.github} target="_blank" rel="noopener noreferrer">在 GitHub 找到我 ↗</a>{siteConfig.email && <a href={`mailto:${siteConfig.email}`}>写一封邮件 ↗</a>}</div>
+        <p class="demo-note">以上为可修改的个人介绍草稿；网站中的示例文章和摄影图片仅用于展示基础版式。</p>
+      </div>
+    </div>
+  </div>
+</Base>

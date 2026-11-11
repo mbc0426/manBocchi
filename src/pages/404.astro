@@ -1,0 +1,7 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/content';
+---
+<Base title="页面未找到" noindex>
+  <div class="not-found shell"><p class="eyebrow">404 / A LITTLE DETOUR</p><h1>好像走远了一点<span class="brand-dot">。</span></h1><p>这一页暂时没有内容。回到首页，重新找一个想去的地方。</p><a class="primary-link" href={withBase('/')}>回到首页 ↗</a></div>
+</Base>
